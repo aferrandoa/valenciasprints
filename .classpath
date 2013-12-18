@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="recursos"/>
+	<classpathentry kind="src" path="images"/>
+	<classpathentry kind="src" path="interface"/>
+	<classpathentry kind="lib" path="core.jar"/>
+	<classpathentry kind="lib" path="/home/angel/workspace/GoldSprints/libs/arduino.jar"/>
+	<classpathentry kind="lib" path="libs/jssc.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="GoldSprints/libs/linux64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/serial.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+
+<VBox fx:controller="controllers.ConfiguracionController" xmlns:fx="http://javafx.com/fxml" 
+	style="-fx-padding: 10 10 10 10" spacing="10" >
+	
+	 <fx:define>
+        <ToggleGroup fx:id="radioTipo" />
+    </fx:define>
+	
+	<HBox spacing="10">
+		<Label text="Puerto" />
+		<ComboBox fx:id="cboPuertos" />
+	</HBox>
+	
+	<Label text="Tipo de carrera" />
+	
+	<HBox spacing="10">
+		<RadioButton text="Tiempo"  toggleGroup="$radioTipo" selected="true"/>
+		<RadioButton text="Distancia" toggleGroup="$radioTipo" />
+	</HBox>
+	
+	<HBox spacing="10" >
+		<Label text="Tiempo" />
+		<TextField fx:id="txtTiempo" />
+	</HBox>
+	
+	<HBox spacing="10" >
+		<Label text="Distancia" />
+		<TextField fx:id="txtDistancia" />
+	</HBox>
+	
+	<HBox alignment="BOTTOM_RIGHT" spacing="10">
+		<Button text="Aceptar" onAction="#aceptarClick"/>
+		<Button text="Cancelar" onAction="#cancelarClick"/>
+	</HBox>
+</VBox>
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.VBox?>
+<?import controllers.*?>
+
+<HBox fx:id="contenedor" fx:controller="controllers.MainController" id="AnchorPane" maxHeight="-Infinity" 
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="428.0" 
+	prefWidth="628.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
+	style="-fx-padding: 10 10 10 10" spacing="10">
+
+	<VBox spacing="10">
+		<Button fx:id="btnConf" onAction="#clickConfiguracion" />
+		<Button fx:id="btnStart" onAction="#clickStart" />
+		<Button fx:id="btnStop" onAction="#clickStop" disable="true"/>
+	</VBox>
+</HBox>
