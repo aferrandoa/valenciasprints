@@ -1,19 +1,30 @@
 package goldSprints;
 
-import java.text.DecimalFormat;
-
 import interfazSerie.ArduinoApp;
 import interfazSerie.ProcesoArduino;
+
+import java.text.DecimalFormat;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -24,8 +35,8 @@ public class CarreraView extends Pane {
 	@SuppressWarnings("unused")
 	private Stage primaryStage;
 	
-	private final Image BICI1 = new Image(this.getClass().getResourceAsStream("/bike.png"));
-	private final Image BICI2 = new Image(this.getClass().getResourceAsStream("/bike.png"));
+	private final Image BICI1 = new Image(this.getClass().getResourceAsStream("/bikeAzul.png"));
+	private final Image BICI2 = new Image(this.getClass().getResourceAsStream("/bikeRoja.png"));
 	
 	private Canvas canvas;
 	private Reloj reloj;
@@ -44,6 +55,7 @@ public class CarreraView extends Pane {
 	final Duration oneFrameAmt = Duration.millis(1000/60);
 	
 	private ArduinoApp arduino;
+	private Timeline animacionPrincipal;
 	
 	public CarreraView(Stage primaryStage, Configuracion conf){
 		this.primaryStage = primaryStage;
@@ -52,7 +64,9 @@ public class CarreraView extends Pane {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent arg0) {
-				arduino.exit();
+				if(arduino != null){
+					arduino.exit();
+				}
 			}
 		} );
 		
@@ -73,19 +87,25 @@ public class CarreraView extends Pane {
 			muestras[i] = new Muestra(avanceNoAjus);
 		}
 		
-		reloj = new Reloj(Color.RED, Color.WHITE);
+		reloj = new Reloj(Color.RED, Color.BLACK);
 		reloj.setLayoutX(180);
 		reloj.setLayoutY(200);
 		reloj.refreshClocks(0);
 		getChildren().add(reloj);
 		
-		TimelineBuilder.create()
+		animacionPrincipal = TimelineBuilder.create()
 		   .cycleCount(Animation.INDEFINITE)
 		   .keyFrames(oneFrame)
-		   .build()
-		   .play();
+		   .build();
+		
+		animacionPrincipal.play();
         
-		arduino = new ArduinoApp(conf);
+		try{
+			arduino = new ArduinoApp(conf);
+		}
+		catch(RuntimeException ex){
+			errorInicandoArduino();
+		}
 	}
 	
 	private void dibujarVelocidad(GraphicsContext gc){
@@ -95,7 +115,10 @@ public class CarreraView extends Pane {
 		gc.setFill(Color.RED);
 		gc.fillRect(60, 180, 30, 160);
 		
-		gc.setFill(Color.BLACK);
+		Font font = new Font("Serif", 12);
+	    gc.setFont(font);
+	    
+		gc.setFill(Color.WHITE);
 		gc.fillText(formatonum.format(velocidades[0]), 20, 360);
 		//gc.fillText(velocidades[1]+"", 60, 360);
 		gc.fillText("Km/h", 100, 360);
@@ -106,9 +129,23 @@ public class CarreraView extends Pane {
 	}
 
 	public void iniciar() {
-		procesoArd = new ProcesoArduino(conf, arduino);
-		tiempoIni = System.currentTimeMillis();
-		procesoArd.start();
+		animacionPrincipal.pause();
+		reloj.setVisible(false);
+		
+		Timeline cuentaAtras = AnimacionCuenta.crearAnimacion(canvas);
+		cuentaAtras.play();
+		
+		cuentaAtras.setOnFinished(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent arg0) {
+				reloj.setVisible(true);
+				animacionPrincipal.play();
+				procesoArd = new ProcesoArduino(conf, arduino);
+				tiempoIni = System.currentTimeMillis();
+				procesoArd.start();
+			}
+		});
 	}
 	
 	public void parar() {
@@ -159,5 +196,29 @@ public class CarreraView extends Pane {
 		for(int i = 0; i < conf.getCorredores(); i++){
 			velocidades[i] = muestras[i].calcularVelocidad();
 		}
+	}
+	
+	/**
+	 * Cancela el inicio de la aplicación cuando no se ha podido establecer la conexión con el
+	 * dispositivo arduino. Avisa antes al usuario con un popUp.
+	 * 
+	 */
+	private void errorInicandoArduino(){
+		Stage dialogStage = new Stage();
+		dialogStage.initModality(Modality.WINDOW_MODAL);
+		
+		Button btnSalir = new Button("Salir");
+		btnSalir.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				System.exit(0);
+			}
+		});
+		
+		dialogStage.setScene(new Scene(VBoxBuilder.create().
+		    children(new Text("No se ha podido establecer la conexión con el dispositivo Arduino.\nPulse el botón para salir"), 
+		    		btnSalir).
+		    alignment(Pos.CENTER).padding(new Insets(5)).build()));
+		dialogStage.showAndWait();
 	}
 }

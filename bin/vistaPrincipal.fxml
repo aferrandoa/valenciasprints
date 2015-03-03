@@ -10,7 +10,7 @@
 <?import controllers.*?>
 
 <HBox fx:id="contenedor" fx:controller="controllers.MainController" id="AnchorPane" maxHeight="-Infinity" 
-	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="428.0" 
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="428.0"
 	prefWidth="628.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
 	style="-fx-padding: 10 10 10 10" spacing="10">
 

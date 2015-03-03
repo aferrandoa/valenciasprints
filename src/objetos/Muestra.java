@@ -1,11 +1,10 @@
 package objetos;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class Muestra {
 
-	private final int NUM_MUESTRAS = 20;
+	private final int NUM_MUESTRAS = 60;
 	private double distanciaPorCont = 0;
 	
 	private ArrayList<Integer> listaContador;

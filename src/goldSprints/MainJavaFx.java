@@ -30,8 +30,9 @@ public class MainJavaFx extends Application {
         controlador.configurar();
     	
         Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().addAll(getClass().getResource("/styles.css").toExternalForm());
     
-        primaryStage.setTitle("FXML Welcome");
+        primaryStage.setTitle("VLCSprints");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
